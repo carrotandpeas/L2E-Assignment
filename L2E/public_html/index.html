@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>JPDB-PROJECT</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>STUDENT DETAILS</h2>
+            <form id="stdForm" method="post">
+                <div class="form-group">
+                    <span><label for="stdId">STUDENT ID:</label> <label id="stdIdMsg">
+                        </label></span>
+                    <input type="text" class="form-control" name="stdId" id="stdId"
+                           placeholder="Enter Student ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="stdName">STUDENT NAME:</label>
+                    <input type="text" class="form-control" id="stdName"
+                           placeholder="Enter Student Name" name="stdName">
+                </div>
+                <div class="form-group">
+                    <label for="stdEmail">EMAIL:</label>
+                    <input type="email" class="form-control" id="stdEmail"
+                           placeholder="Enter Student Email" name="stdEmail">
+                </div>
+                <div class="form-group">
+                    <label for="stdNo">PHONE NUMBER:</label>
+                    <input type="tel" class="form-control" id="stdNo"
+                           placeholder="Enter Phone Number" name="stdNo">
+                    </div>
+                <div class="form-group">
+                    <label for="stdNo">Department:</label>
+                    <input type="tel" class="form-control" id="dptNo"
+                           placeholder="Enter Department" name="dptNo">
+                    </div>
+                <div class="form-group">
+                    <label for="stdpswd">Password</label>
+                    <input type="password" class="form-control" id="stdpswd"
+                           placeholder="Enter Password" name="stdpswd">
+                    </div>
+                    
+              
+               
+                <input type="button" class="btn btn-primary" id="stdSave" value="Save"
+                       onclick="saveStudent();">
+            </form>
+        </div>
+        <script>
+           
+
+
+            $("#stdId").focus();
+            function validateAndGetFormData() {
+                var stdIdVar = $("#stdId").val();
+                if (stdIdVar === "") {
+                    alert("Student ID Required Value");
+                    $("#stdId").focus();
+                    return "";
+                }
+                var stdNameVar = $("#stdName").val();
+                if (stdNameVar === "") {
+                    alert("Student Name is Required Value");
+                    $("#stdName").focus();
+                    return "";
+                }
+                var stdEmailVar = $("#stdEmail").val();
+                if (stdEmailVar === "") {
+                    alert("Student Email is Required Value");
+                    $("#stdEmail").focus();
+                    return "";
+                }
+                var stdNoVar = $("#stdNo").val();
+                if (stdEmailVar === "") {
+                    alert("Phone Number is Required Value");
+                    $("#stdNo").focus();
+                    return "";
+                }
+                var dptNoVar = $("#dptNo").val();
+                if (dptNoVar === "") {
+                    alert("Department Required Value");
+                    $("#dptNo").focus();
+                    return "";
+                }
+                var stdpswdVar = $("#stdpswd").val();
+                if (stdpswdVar === "") {
+                    alert("Enter Password");
+                    $("#stdpswd").focus();
+                    return "";
+                }
+                var jsonStrObj = {
+                    stdId: stdIdVar,
+                    stdName: stdNameVar,
+                    stdEmail: stdEmailVar,
+                    stdNo: stdNoVar,
+                    dptNo: dptNoVar,
+                    stdpswd: stdpswdVar,
+                };
+                return JSON.stringify(jsonStrObj);
+            }
+            
+            function createPUTRequest(connToken, jsonObj, dbName, relName) {
+                var putRequest = "{\n"
+                        + "\"token\" : \""
+                        + connToken
+                        + "\","
+                        + "\"dbName\": \""
+                        + dbName
+                        + "\",\n" + "\"cmd\" : \"PUT\",\n"
+                        + "\"rel\" : \""
+                        + relName + "\","
+                        + "\"jsonStr\": \n"
+                        + jsonObj
+                        + "\n"
+                        + "}";
+                return putRequest;
+            }
+            function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+                var url = dbBaseUrl + apiEndPointUrl;
+                var jsonObj;
+                $.post(url, reqString, function (result) {
+                    jsonObj = JSON.parse(result);
+                }).fail(function (result) {
+                    var dataJsonObj = result.responseText;
+                    jsonObj = JSON.parse(dataJsonObj);
+                });
+                return jsonObj;
+            }
+            
+            function resetForm() {
+                $("#stdId").val("");
+                $("#stdName").val("");
+                $("#stdEmail").val("");
+                $("#stdNo").val("");
+                $("#dptNo").val("");
+                $("#stdpswd").val("");
+                $("#stdId").focus();
+            }
+            function saveStudent() {
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "") {
+                    return;
+                }
+                var putReqStr = createPUTRequest("90938533|-31948831382039700|90946970",
+                        jsonStr, "STUDENT", "STD-DET");
+                alert(putReqStr);
+                jQuery.ajaxSetup({async: false});
+                var resultObj = executeCommand(putReqStr,"http://api.login2explore.com:5577","/api/iml");
+                        
+                alert(JSON.stringify(resultObj));
+                jQuery.ajaxSetup({async: true});
+                resetForm();
+            }
+        </script>
+    </body>
+</html>
