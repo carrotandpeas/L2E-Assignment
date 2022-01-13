@@ -10,3 +10,5 @@ JsonPowerDB is a Real-time, High Performance, Lightweight and Simple to Use, Res
 ## About Project
 - In this Mini Project I have created a Student details fill-up form with the help of JsonPowerDB .
 - I have usedd JsonPowerDB as my database to store the data.
+### Screenshots
+![Alt Text](https://github.com/carrotandpeas/L2E-Assignment/blob/main/L2E/Screenshots/DATABASE.png)
